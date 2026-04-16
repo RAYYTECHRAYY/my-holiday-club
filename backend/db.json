@@ -1,0 +1,308 @@
+{
+  "members": [],
+  "inquiries": [],
+  "contacts": [],
+  "destinations": [
+    {
+      "id": "1",
+      "region": "north",
+      "name": "Shimla",
+      "state": "Himachal Pradesh",
+      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+      "description": "The Queen of Hills, Shimla offers breathtaking Himalayan views and colonial charm.",
+      "price": "Starting ₹8,999/night",
+      "rating": 4.8,
+      "category": "Hill Station",
+      "amenities": ["Pool", "Spa", "Restaurant", "WiFi", "Gym"],
+      "type": "national"
+    },
+    {
+      "id": "2",
+      "region": "north",
+      "name": "Manali",
+      "state": "Himachal Pradesh",
+      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800",
+      "description": "A paradise for adventure lovers with snow-capped peaks and lush green valleys.",
+      "price": "Starting ₹7,999/night",
+      "rating": 4.7,
+      "category": "Adventure",
+      "amenities": ["Adventure Sports", "Spa", "Restaurant", "WiFi"],
+      "type": "national"
+    },
+    {
+      "id": "3",
+      "region": "north",
+      "name": "Jaipur",
+      "state": "Rajasthan",
+      "image": "https://images.unsplash.com/photo-1477587458883-47145ed31fd1?w=800",
+      "description": "The Pink City - a royal blend of culture, history, and architectural grandeur.",
+      "price": "Starting ₹6,999/night",
+      "rating": 4.6,
+      "category": "Heritage",
+      "amenities": ["Heritage Tour", "Spa", "Restaurant", "WiFi", "Pool"],
+      "type": "national"
+    },
+    {
+      "id": "4",
+      "region": "north",
+      "name": "Agra",
+      "state": "Uttar Pradesh",
+      "image": "https://images.unsplash.com/photo-1548013146-72479768bada?w=800",
+      "description": "Home to the iconic Taj Mahal and rich Mughal history.",
+      "price": "Starting ₹5,999/night",
+      "rating": 4.5,
+      "category": "Heritage",
+      "amenities": ["Heritage Tour", "Restaurant", "WiFi", "Pool"],
+      "type": "national"
+    },
+    {
+      "id": "5",
+      "region": "east",
+      "name": "Darjeeling",
+      "state": "West Bengal",
+      "image": "https://images.unsplash.com/photo-1544634076-a90160ddf44e?w=800",
+      "description": "The land of tea gardens with stunning views of Kanchenjunga.",
+      "price": "Starting ₹6,499/night",
+      "rating": 4.7,
+      "category": "Hill Station",
+      "amenities": ["Tea Tours", "Spa", "Restaurant", "WiFi"],
+      "type": "national"
+    },
+    {
+      "id": "6",
+      "region": "east",
+      "name": "Puri",
+      "state": "Odisha",
+      "image": "https://images.unsplash.com/photo-1590577976322-3d2d6a2130f7?w=800",
+      "description": "A sacred coastal town with beautiful beaches and the famous Jagannath Temple.",
+      "price": "Starting ₹5,499/night",
+      "rating": 4.4,
+      "category": "Beach & Spiritual",
+      "amenities": ["Beach Access", "Temple Tour", "Restaurant", "WiFi"],
+      "type": "national"
+    },
+    {
+      "id": "7",
+      "region": "east",
+      "name": "Gangtok",
+      "state": "Sikkim",
+      "image": "https://images.unsplash.com/photo-1571118247553-6df95b68e1a9?w=800",
+      "description": "The capital of Sikkim, surrounded by mountains and Buddhist monasteries.",
+      "price": "Starting ₹7,499/night",
+      "rating": 4.8,
+      "category": "Mountain",
+      "amenities": ["Mountain View", "Spa", "Restaurant", "WiFi", "Trekking"],
+      "type": "national"
+    },
+    {
+      "id": "8",
+      "region": "west",
+      "name": "Goa",
+      "state": "Goa",
+      "image": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800",
+      "description": "India's beach paradise with vibrant nightlife and Portuguese heritage.",
+      "price": "Starting ₹8,499/night",
+      "rating": 4.9,
+      "category": "Beach",
+      "amenities": ["Private Beach", "Pool", "Spa", "Restaurant", "Water Sports"],
+      "type": "national"
+    },
+    {
+      "id": "9",
+      "region": "west",
+      "name": "Udaipur",
+      "state": "Rajasthan",
+      "image": "https://images.unsplash.com/photo-1598977453075-e2f7e4afc843?w=800",
+      "description": "The City of Lakes - romantic lakeside palaces and royal experience.",
+      "price": "Starting ₹9,999/night",
+      "rating": 4.9,
+      "category": "Heritage & Romance",
+      "amenities": ["Lake View", "Heritage Tour", "Spa", "Restaurant", "Pool"],
+      "type": "national"
+    },
+    {
+      "id": "10",
+      "region": "west",
+      "name": "Lonavala",
+      "state": "Maharashtra",
+      "image": "https://images.unsplash.com/photo-1597073765710-c9cf16cf8a78?w=800",
+      "description": "A scenic hill station near Mumbai, perfect for weekend getaways.",
+      "price": "Starting ₹5,999/night",
+      "rating": 4.3,
+      "category": "Hill Station",
+      "amenities": ["Nature Trails", "Pool", "Restaurant", "WiFi"],
+      "type": "national"
+    },
+    {
+      "id": "11",
+      "region": "south",
+      "name": "Kerala Backwaters",
+      "state": "Kerala",
+      "image": "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?w=800",
+      "description": "God's Own Country - serene backwaters, houseboats and lush greenery.",
+      "price": "Starting ₹9,499/night",
+      "rating": 4.9,
+      "category": "Backwater",
+      "amenities": ["Houseboat", "Ayurveda Spa", "Restaurant", "Nature Tour"],
+      "type": "national"
+    },
+    {
+      "id": "12",
+      "region": "south",
+      "name": "Coorg",
+      "state": "Karnataka",
+      "image": "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800",
+      "description": "The Scotland of India - misty hills, coffee plantations and waterfalls.",
+      "price": "Starting ₹7,499/night",
+      "rating": 4.7,
+      "category": "Hill Station",
+      "amenities": ["Coffee Tour", "Trekking", "Spa", "Restaurant", "WiFi"],
+      "type": "national"
+    },
+    {
+      "id": "13",
+      "region": "south",
+      "name": "Ooty",
+      "state": "Tamil Nadu",
+      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800",
+      "description": "The Queen of Hill Stations with tea gardens and toy train experience.",
+      "price": "Starting ₹6,499/night",
+      "rating": 4.5,
+      "category": "Hill Station",
+      "amenities": ["Tea Gardens", "Toy Train", "Spa", "Restaurant", "WiFi"],
+      "type": "national"
+    },
+    {
+      "id": "14",
+      "region": "international",
+      "name": "Bali",
+      "state": "Indonesia",
+      "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800",
+      "description": "The Island of Gods with stunning temples, rice terraces and beaches.",
+      "price": "Starting ₹45,000/night",
+      "rating": 4.9,
+      "category": "Beach & Culture",
+      "amenities": ["Private Villa", "Infinity Pool", "Spa", "Restaurant", "Temple Tour"],
+      "type": "international"
+    },
+    {
+      "id": "15",
+      "region": "international",
+      "name": "Dubai",
+      "state": "UAE",
+      "image": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
+      "description": "The city of superlatives - luxury shopping, ultramodern architecture.",
+      "price": "Starting ₹55,000/night",
+      "rating": 4.8,
+      "category": "Luxury",
+      "amenities": ["Desert Safari", "Shopping", "Fine Dining", "Pool", "Spa"],
+      "type": "international"
+    },
+    {
+      "id": "16",
+      "region": "international",
+      "name": "Maldives",
+      "state": "Maldives",
+      "image": "https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800",
+      "description": "Pristine overwater bungalows in crystal-clear turquoise waters.",
+      "price": "Starting ₹75,000/night",
+      "rating": 5.0,
+      "category": "Luxury Beach",
+      "amenities": ["Overwater Bungalow", "Snorkeling", "Spa", "Fine Dining", "Sunset Cruise"],
+      "type": "international"
+    },
+    {
+      "id": "17",
+      "region": "international",
+      "name": "Singapore",
+      "state": "Singapore",
+      "image": "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=800",
+      "description": "A vibrant city-state blending modern architecture with multicultural heritage.",
+      "price": "Starting ₹42,000/night",
+      "rating": 4.7,
+      "category": "City & Culture",
+      "amenities": ["City Tour", "Universal Studios", "Fine Dining", "Shopping", "Spa"],
+      "type": "international"
+    },
+    {
+      "id": "18",
+      "region": "international",
+      "name": "Thailand",
+      "state": "Thailand",
+      "image": "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800",
+      "description": "Land of Smiles - tropical beaches, ornate shrines and vibrant street life.",
+      "price": "Starting ₹38,000/night",
+      "rating": 4.6,
+      "category": "Beach & Culture",
+      "amenities": ["Island Hopping", "Temple Tour", "Spa", "Street Food Tour", "Pool"],
+      "type": "international"
+    }
+  ],
+  "packages": [
+    {
+      "id": "p1",
+      "name": "Holiday Starter",
+      "price": "₹2,99,999",
+      "duration": "3 Nights / 4 Days",
+      "features": ["Access to 50+ Resorts", "1 Free Upgrade/Year", "Priority Booking", "24/7 Support"],
+      "highlighted": false
+    },
+    {
+      "id": "p2",
+      "name": "Holiday Classic",
+      "price": "₹4,99,999",
+      "duration": "7 Nights / 8 Days",
+      "features": ["Access to 100+ Resorts", "2 Free Upgrades/Year", "Priority Booking", "Complimentary Meals", "24/7 Concierge"],
+      "highlighted": true
+    },
+    {
+      "id": "p3",
+      "name": "Holiday Premium",
+      "price": "₹7,99,999",
+      "duration": "14 Nights / 15 Days",
+      "features": ["Access to 200+ Resorts", "Unlimited Upgrades", "Priority Booking", "All-Inclusive Meals", "24/7 Personal Concierge", "Airport Transfers", "International Destinations"],
+      "highlighted": false
+    }
+  ],
+  "siteSettings": {
+    "contactInfo": {
+      "phone": "+91 98765 43210",
+      "email": "info@myholidayclub.co.in",
+      "address": "My Holiday Club, 123 Travel House, Connaught Place, New Delhi - 110001",
+      "whatsapp": "+91 98765 43210"
+    },
+    "socialMedia": {
+      "facebook": "https://facebook.com/myholidayclub",
+      "instagram": "https://instagram.com/myholidayclub",
+      "twitter": "https://twitter.com/myholidayclub",
+      "youtube": "https://youtube.com/myholidayclub",
+      "linkedin": "https://linkedin.com/company/myholidayclub"
+    }
+  },
+  "news": [
+    {
+      "id": "n1",
+      "title": "My Holiday Club Launches New Maldives Package",
+      "date": "2024-01-15",
+      "category": "New Launch",
+      "excerpt": "We are thrilled to announce our exclusive overwater bungalow packages in the Maldives.",
+      "image": "https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=400"
+    },
+    {
+      "id": "n2",
+      "title": "Expansion to 50 New Destinations Across India",
+      "date": "2024-02-01",
+      "category": "Expansion",
+      "excerpt": "My Holiday Club expands its portfolio with 50 new premium properties across India.",
+      "image": "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?w=400"
+    },
+    {
+      "id": "n3",
+      "title": "Award: Best Holiday Club of the Year 2024",
+      "date": "2024-03-10",
+      "category": "Award",
+      "excerpt": "My Holiday Club wins the prestigious Best Holiday Club of the Year award at the India Travel Awards.",
+      "image": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=400"
+    }
+  ]
+}
