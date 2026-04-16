@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
 :root {
   --primary: #0077C8;
   --primary-dark: #005a96;
@@ -15,7 +17,7 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: var(--light); color: var(--dark); }
+body { font-family: 'Poppins', sans-serif; background: var(--light); color: var(--dark); }
 
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: #f1f5f9; }
@@ -132,7 +134,7 @@ tbody tr:last-child td { border-bottom: none; }
 .badge-read { background: #f3f4f6; color: #4b5563; }
 
 /* Buttons */
-.btn { padding: 8px 18px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+.btn { padding: 8px 18px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; font-family: 'Poppins', sans-serif; }
 .btn-primary { background: var(--primary); color: white; }
 .btn-primary:hover { background: var(--primary-dark); }
 .btn-danger { background: #fee2e2; color: var(--danger); }
@@ -143,7 +145,7 @@ tbody tr:last-child td { border-bottom: none; }
 .btn-outline:hover { background: var(--primary); color: white; }
 
 /* Form controls */
-.form-control { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 9px; font-family: 'Inter', sans-serif; font-size: 0.9rem; transition: border-color 0.2s; }
+.form-control { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 9px; font-family: 'Poppins', sans-serif; font-size: 0.9rem; transition: border-color 0.2s; }
 .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,119,200,0.1); }
 .form-label { font-size: 0.82rem; font-weight: 600; color: var(--dark); margin-bottom: 6px; display: block; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -156,7 +158,7 @@ tbody tr:last-child td { border-bottom: none; }
 
 /* Search & Filter bar */
 .filter-bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
-.search-input { padding: 9px 14px 9px 36px; border: 1.5px solid var(--border); border-radius: 9px; font-size: 0.9rem; font-family: 'Inter', sans-serif; width: 240px; transition: border-color 0.2s; }
+.search-input { padding: 9px 14px 9px 36px; border: 1.5px solid var(--border); border-radius: 9px; font-size: 0.9rem; font-family: 'Poppins', sans-serif; width: 240px; transition: border-color 0.2s; }
 .search-input:focus { outline: none; border-color: var(--primary); }
 .search-wrap { position: relative; }
 .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--gray); font-size: 0.9rem; }

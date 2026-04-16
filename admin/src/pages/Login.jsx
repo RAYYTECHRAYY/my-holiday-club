@@ -60,7 +60,7 @@ const Login = ({ onLogin }) => {
               </g>
             </svg>
           </div>
-          <h1 style={{ fontFamily: "'Inter', sans-serif", fontSize: '1.3rem', fontWeight: 700, color: '#1a1a2e' }}>
+          <h1 style={{ fontFamily: "'Poppins', sans-serif", fontSize: '1.3rem', fontWeight: 700, color: '#1a1a2e' }}>
             My Holiday Club
           </h1>
           <p style={{ color: '#6b7280', fontSize: '0.85rem', marginTop: '4px' }}>Admin Panel</p>

@@ -52,7 +52,7 @@ const WhatsNews = () => {
                     background: 'transparent', color: '#0077C8',
                     border: '2px solid #0077C8', borderRadius: '50px',
                     cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem',
-                    transition: 'all 0.3s', fontFamily: "'Inter', sans-serif"
+                    transition: 'all 0.3s', fontFamily: "'Poppins', sans-serif"
                   }}
                     onMouseEnter={e => { e.target.style.background = '#0077C8'; e.target.style.color = 'white'; }}
                     onMouseLeave={e => { e.target.style.background = 'transparent'; e.target.style.color = '#0077C8'; }}

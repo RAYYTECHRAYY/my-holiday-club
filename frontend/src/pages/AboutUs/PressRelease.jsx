@@ -52,7 +52,7 @@ const PressRelease = () => (
                 <button style={{
                   marginTop: '12px', background: 'none', border: 'none',
                   color: '#0077C8', fontWeight: 600, cursor: 'pointer',
-                  fontSize: '0.9rem', fontFamily: "'Inter', sans-serif"
+                  fontSize: '0.9rem', fontFamily: "'Poppins', sans-serif"
                 }}>Read Full Release →</button>
               </div>
             </div>

@@ -362,7 +362,7 @@ const Home = ({ onMemberClick }) => {
                 padding:'16px 44px', background:'white', color:'#0077C8', border:'none',
                 borderRadius:'50px', fontWeight:800, fontSize:'1.05rem', cursor:'pointer',
                 transition:'all 0.3s', boxShadow:'0 8px 30px rgba(0,0,0,0.2)',
-                display:'inline-flex', alignItems:'center', gap:'8px', fontFamily:"'Inter',sans-serif"
+                display:'inline-flex', alignItems:'center', gap:'8px', fontFamily:"'Poppins',sans-serif"
               }}
                 onMouseEnter={e => { e.currentTarget.style.transform='translateY(-3px) scale(1.04)'; e.currentTarget.style.boxShadow='0 16px 40px rgba(0,0,0,0.25)'; }}
                 onMouseLeave={e => { e.currentTarget.style.transform='translateY(0) scale(1)'; e.currentTarget.style.boxShadow='0 8px 30px rgba(0,0,0,0.2)'; }}

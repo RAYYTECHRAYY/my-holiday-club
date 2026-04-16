@@ -60,7 +60,7 @@ const Navbar = ({ onMemberClick }) => {
     }}>
       <style>{`
         .nav-link {
-          font-family: 'Inter', sans-serif;
+          font-family: 'Poppins', sans-serif;
           font-size: 1rem; font-weight: 600;
           text-decoration: none; padding: 10px 6px;
           position: relative; transition: color 0.3s ease;
@@ -279,7 +279,7 @@ const Navbar = ({ onMemberClick }) => {
                 background:'linear-gradient(135deg,#f0a500,#ff6b6b)',
                 color:'white', border:'none', borderRadius:'50px',
                 cursor:'pointer', fontWeight:700, fontSize:'0.92rem',
-                fontFamily:"'Inter',sans-serif",
+                fontFamily:"'Poppins',sans-serif",
                 transition:'all 0.3s ease', whiteSpace:'nowrap', letterSpacing:'0.3px'
               }}
               onMouseEnter={e => { e.currentTarget.style.transform='translateY(-3px) scale(1.04)'; e.currentTarget.style.animation='none'; }}

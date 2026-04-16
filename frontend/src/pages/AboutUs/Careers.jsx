@@ -83,7 +83,7 @@ const Careers = () => {
                   background: 'linear-gradient(135deg, #0077C8, #005a96)',
                   color: 'white', border: 'none', borderRadius: '50px',
                   cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem',
-                  fontFamily: "'Inter', sans-serif", transition: 'all 0.3s'
+                  fontFamily: "'Poppins', sans-serif", transition: 'all 0.3s'
                 }}>Apply Now</button>
               </div>
             ))}

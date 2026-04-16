@@ -146,7 +146,7 @@ const MembershipModal = ({ onClose }) => {
                 background: 'linear-gradient(135deg, #0077C8, #005a96)',
                 color: 'white', border: 'none', borderRadius: '50px',
                 fontSize: '1rem', fontWeight: 700, cursor: 'pointer',
-                transition: 'all 0.3s', fontFamily: "'Inter', sans-serif"
+                transition: 'all 0.3s', fontFamily: "'Poppins', sans-serif"
               }}
                 onMouseEnter={e => e.target.style.transform = 'translateY(-2px)'}
                 onMouseLeave={e => e.target.style.transform = 'translateY(0)'}

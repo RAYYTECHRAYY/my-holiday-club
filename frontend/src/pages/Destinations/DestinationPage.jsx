@@ -121,7 +121,7 @@ const DestinationPage = ({ region, title, subtitle, heroImage, type = 'national'
                   color: filter === cat ? 'white' : '#6b7280',
                   border: `2px solid ${filter === cat ? '#0077C8' : '#e2e8f0'}`,
                   cursor: 'pointer', fontWeight: 500, fontSize: '0.9rem',
-                  fontFamily: "'Inter', sans-serif"
+                  fontFamily: "'Poppins', sans-serif"
                 }}>
                   {cat === 'all' ? 'All Destinations' : cat}
                 </button>
@@ -208,7 +208,7 @@ const DestinationPage = ({ region, title, subtitle, heroImage, type = 'national'
                     background: 'linear-gradient(135deg, #0077C8, #005a96)',
                     color: 'white', border: 'none', borderRadius: '50px',
                     fontWeight: 600, cursor: 'pointer', fontSize: '0.95rem',
-                    fontFamily: "'Inter', sans-serif", transition: 'all 0.3s',
+                    fontFamily: "'Poppins', sans-serif", transition: 'all 0.3s',
                     letterSpacing: '0.5px'
                   }}
                     onMouseEnter={e => { e.target.style.transform = 'scale(1.02)'; e.target.style.boxShadow = '0 8px 20px rgba(0,119,200,0.3)'; }}

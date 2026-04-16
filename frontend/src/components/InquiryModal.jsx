@@ -130,7 +130,7 @@ const InquiryModal = ({ destination, onClose }) => {
                 background: 'linear-gradient(135deg, #0077C8, #005a96)',
                 color: 'white', border: 'none', borderRadius: '50px',
                 fontSize: '1rem', fontWeight: 700, cursor: 'pointer',
-                fontFamily: "'Inter', sans-serif", transition: 'all 0.3s'
+                fontFamily: "'Poppins', sans-serif", transition: 'all 0.3s'
               }}>
                 🏖️ Submit Enquiry
               </button>

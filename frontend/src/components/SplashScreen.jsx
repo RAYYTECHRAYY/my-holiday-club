@@ -104,7 +104,7 @@ const SplashScreen = () => {
           My Holiday Club
         </h1>
         <p style={{
-          fontFamily: "'Inter', sans-serif",
+          fontFamily: "'Poppins', sans-serif",
           fontSize: '1.1rem',
           color: 'rgba(255,255,255,0.8)',
           letterSpacing: '4px',

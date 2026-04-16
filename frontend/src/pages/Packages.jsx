@@ -102,7 +102,7 @@ const Packages = () => {
                     background: pkg.highlighted ? 'rgba(255,255,255,0.15)' : 'linear-gradient(135deg, #0077C8, #005a96)',
                     color: 'white', border: pkg.highlighted ? '2px solid rgba(255,255,255,0.4)' : 'none',
                     borderRadius: '50px', fontWeight: 700, cursor: 'pointer',
-                    fontSize: '1rem', fontFamily: "'Inter', sans-serif",
+                    fontSize: '1rem', fontFamily: "'Poppins', sans-serif",
                     transition: 'all 0.3s'
                   }}
                     onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
