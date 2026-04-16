@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const empty = { name: '', region: 'north', state: '', image: '', description: '', price: '', rating: 4.5, category: '', amenities: '', type: 'national' };
 
@@ -10,7 +10,7 @@ const Destinations = () => {
   const [form, setForm] = useState(empty);
   const [loading, setLoading] = useState(true);
 
-  const fetch = async () => { try { const r = await axios.get('/api/destinations'); setDestinations(r.data.data); } catch (_) {} setLoading(false); };
+  const fetch = async () => { try { const r = await api.get('/api/destinations'); setDestinations(r.data.data); } catch (_) {} setLoading(false); };
   useEffect(() => { fetch(); }, []);
 
   const filtered = destinations.filter(d =>
@@ -21,12 +21,12 @@ const Destinations = () => {
 
   const save = async () => {
     const data = { ...form, amenities: typeof form.amenities === 'string' ? form.amenities.split(',').map(s => s.trim()).filter(Boolean) : form.amenities };
-    if (modal === 'add') await axios.post('/api/destinations', data);
-    else await axios.put(`/api/destinations/${form.id}`, data);
+    if (modal === 'add') await api.post('/api/destinations', data);
+    else await api.put(`/api/destinations/${form.id}`, data);
     setModal(null); setForm(empty); fetch();
   };
 
-  const del = async (id) => { if (window.confirm('Delete destination?')) { await axios.delete(`/api/destinations/${id}`); fetch(); } };
+  const del = async (id) => { if (window.confirm('Delete destination?')) { await api.delete(`/api/destinations/${id}`); fetch(); } };
 
   const openEdit = (dest) => {
     setForm({ ...dest, amenities: Array.isArray(dest.amenities) ? dest.amenities.join(', ') : dest.amenities });

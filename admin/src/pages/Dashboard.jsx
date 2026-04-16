@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({ totalMembers: 0, totalInquiries: 0, totalContacts: 0, totalDestinations: 0, newMembers: 0, newInquiries: 0 });
@@ -11,9 +11,9 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const [statsRes, membersRes, inqRes] = await Promise.all([
-          axios.get('/api/stats'),
-          axios.get('/api/members'),
-          axios.get('/api/inquiries')
+          api.get('/api/stats'),
+          api.get('/api/members'),
+          api.get('/api/inquiries')
         ]);
         setStats(statsRes.data.data);
         setRecentMembers(membersRes.data.data.slice(-5).reverse());

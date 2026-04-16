@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api';
 import InquiryModal from '../../components/InquiryModal';
 
 const DestinationPage = ({ region, title, subtitle, heroImage, type = 'national' }) => {
@@ -11,7 +11,7 @@ const DestinationPage = ({ region, title, subtitle, heroImage, type = 'national'
   useEffect(() => {
     const fetchDests = async () => {
       try {
-        const res = await axios.get(`/api/destinations?region=${region}&type=${type}`);
+        const res = await api.get(`/api/destinations?region=${region}&type=${type}`);
         setDestinations(res.data.data);
       } catch (_) {
         // fallback data

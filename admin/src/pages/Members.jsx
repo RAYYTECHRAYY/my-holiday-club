@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const Members = () => {
   const [members, setMembers] = useState([]);
@@ -9,7 +9,7 @@ const Members = () => {
 
   const fetchMembers = async () => {
     try {
-      const res = await axios.get('/api/members');
+      const res = await api.get('/api/members');
       setMembers(res.data.data);
     } catch (_) {}
     setLoading(false);
@@ -24,19 +24,19 @@ const Members = () => {
   );
 
   const updateStatus = async (id, status) => {
-    await axios.put(`/api/members/${id}`, { status });
+    await api.put(`/api/members/${id}`, { status });
     fetchMembers();
   };
 
   const deleteMember = async (id) => {
     if (window.confirm('Delete this member?')) {
-      await axios.delete(`/api/members/${id}`);
+      await api.delete(`/api/members/${id}`);
       fetchMembers();
     }
   };
 
   const saveEdit = async () => {
-    await axios.put(`/api/members/${editMember.id}`, editMember);
+    await api.put(`/api/members/${editMember.id}`, editMember);
     setEditMember(null);
     fetchMembers();
   };

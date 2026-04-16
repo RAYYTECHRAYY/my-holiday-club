@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api';
 
 const fallbackNews = [
   { id: 'n1', title: 'My Holiday Club Launches New Maldives Package', date: '2024-01-15', category: 'New Launch', excerpt: 'We are thrilled to announce our exclusive overwater bungalow packages in the Maldives, offering unparalleled luxury at member-exclusive rates.', image: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=600' },
@@ -10,7 +10,7 @@ const fallbackNews = [
 
 const WhatsNews = () => {
   const [news, setNews] = useState(fallbackNews);
-  useEffect(() => { axios.get('/api/news').then(r => { if (r.data.data?.length) setNews(r.data.data); }).catch(() => {}); }, []);
+  useEffect(() => { api.get('/api/news').then(r => { if (r.data.data?.length) setNews(r.data.data); }).catch(() => {}); }, []);
 
   const categoryColors = { 'New Launch': '#10b981', 'Expansion': '#0077C8', 'Award': '#f0a500', 'Technology': '#8b5cf6' };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const Inquiries = () => {
   const [inquiries, setInquiries] = useState([]);
@@ -8,7 +8,7 @@ const Inquiries = () => {
   const [loading, setLoading] = useState(true);
 
   const fetch = async () => {
-    try { const r = await axios.get('/api/inquiries'); setInquiries(r.data.data); } catch (_) {}
+    try { const r = await api.get('/api/inquiries'); setInquiries(r.data.data); } catch (_) {}
     setLoading(false);
   };
   useEffect(() => { fetch(); }, []);
@@ -18,8 +18,8 @@ const Inquiries = () => {
     (i.destination || '').toLowerCase().includes(search.toLowerCase())
   );
 
-  const updateStatus = async (id, status) => { await axios.put(`/api/inquiries/${id}`, { status }); fetch(); };
-  const deleteInq = async (id) => { if (window.confirm('Delete?')) { await axios.delete(`/api/inquiries/${id}`); fetch(); } };
+  const updateStatus = async (id, status) => { await api.put(`/api/inquiries/${id}`, { status }); fetch(); };
+  const deleteInq = async (id) => { if (window.confirm('Delete?')) { await api.delete(`/api/inquiries/${id}`); fetch(); } };
 
   return (
     <div>

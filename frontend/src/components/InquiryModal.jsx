@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const InquiryModal = ({ destination, onClose }) => {
   const [step, setStep] = useState(1);
@@ -25,7 +25,7 @@ const InquiryModal = ({ destination, onClose }) => {
     if (!validate()) return;
     setStep(2);
     try {
-      await axios.post('/api/inquiries', {
+      await api.post('/api/inquiries', {
         ...formData,
         destination: destination?.name,
         region: destination?.region,

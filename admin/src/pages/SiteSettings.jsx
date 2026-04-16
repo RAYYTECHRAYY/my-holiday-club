@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const SiteSettings = () => {
   const [settings, setSettings] = useState({
@@ -10,11 +10,11 @@ const SiteSettings = () => {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    axios.get('/api/settings').then(r => { if (r.data.data) setSettings(r.data.data); setLoading(false); }).catch(() => setLoading(false));
+    api.get('/api/settings').then(r => { if (r.data.data) setSettings(r.data.data); setLoading(false); }).catch(() => setLoading(false));
   }, []);
 
   const save = async () => {
-    await axios.put('/api/settings', settings);
+    await api.put('/api/settings', settings);
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };

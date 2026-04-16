@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import MembershipModal from '../components/MembershipModal';
 
 const fallbackPackages = [
@@ -14,7 +14,7 @@ const Packages = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
 
   useEffect(() => {
-    axios.get('/api/packages').then(res => {
+    api.get('/api/packages').then(res => {
       if (res.data.data?.length) setPackages(res.data.data);
     }).catch(() => {});
   }, []);

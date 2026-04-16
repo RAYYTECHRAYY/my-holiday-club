@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const Contact = () => {
   const [settings, setSettings] = useState({
@@ -11,7 +11,7 @@ const Contact = () => {
   const [step, setStep] = useState('form');
 
   useEffect(() => {
-    axios.get('/api/settings').then(r => { if (r.data.data) setSettings(r.data.data); }).catch(() => {});
+    api.get('/api/settings').then(r => { if (r.data.data) setSettings(r.data.data); }).catch(() => {});
   }, []);
 
   const validate = () => {
@@ -28,7 +28,7 @@ const Contact = () => {
     e.preventDefault();
     if (!validate()) return;
     setStep('loading');
-    try { await axios.post('/api/contacts', form); } catch (_) {}
+    try { await api.post('/api/contacts', form); } catch (_) {}
     setTimeout(() => setStep('success'), 1800);
   };
 

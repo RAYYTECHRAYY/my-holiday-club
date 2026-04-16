@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const emptyPkg = { name: '', price: '', duration: '', features: '', highlighted: false };
 
@@ -9,17 +9,17 @@ const Packages = () => {
   const [form, setForm] = useState(emptyPkg);
   const [loading, setLoading] = useState(true);
 
-  const fetch = async () => { try { const r = await axios.get('/api/packages'); setPackages(r.data.data); } catch (_) {} setLoading(false); };
+  const fetch = async () => { try { const r = await api.get('/api/packages'); setPackages(r.data.data); } catch (_) {} setLoading(false); };
   useEffect(() => { fetch(); }, []);
 
   const save = async () => {
     const data = { ...form, features: typeof form.features === 'string' ? form.features.split('\n').map(s => s.trim()).filter(Boolean) : form.features };
-    if (modal === 'add') await axios.post('/api/packages', data);
-    else await axios.put(`/api/packages/${form.id}`, data);
+    if (modal === 'add') await api.post('/api/packages', data);
+    else await api.put(`/api/packages/${form.id}`, data);
     setModal(null); setForm(emptyPkg); fetch();
   };
 
-  const del = async (id) => { if (window.confirm('Delete package?')) { await axios.delete(`/api/packages/${id}`); fetch(); } };
+  const del = async (id) => { if (window.confirm('Delete package?')) { await api.delete(`/api/packages/${id}`); fetch(); } };
   const openEdit = (pkg) => { setForm({ ...pkg, features: Array.isArray(pkg.features) ? pkg.features.join('\n') : pkg.features }); setModal('edit'); };
 
   return (

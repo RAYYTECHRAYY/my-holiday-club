@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const Contacts = () => {
   const [contacts, setContacts] = useState([]);
   const [viewMsg, setViewMsg] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetch = async () => { try { const r = await axios.get('/api/contacts'); setContacts(r.data.data); } catch (_) {} setLoading(false); };
+  const fetch = async () => { try { const r = await api.get('/api/contacts'); setContacts(r.data.data); } catch (_) {} setLoading(false); };
   useEffect(() => { fetch(); }, []);
 
-  const del = async (id) => { if (window.confirm('Delete?')) { await axios.delete(`/api/contacts/${id}`); fetch(); } };
+  const del = async (id) => { if (window.confirm('Delete?')) { await api.delete(`/api/contacts/${id}`); fetch(); } };
 
   return (
     <div>

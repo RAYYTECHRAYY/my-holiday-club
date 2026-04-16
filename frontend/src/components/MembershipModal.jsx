@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const MembershipModal = ({ onClose }) => {
   const [step, setStep] = useState(1); // 1=form, 2=submitting, 3=success
@@ -27,7 +27,7 @@ const MembershipModal = ({ onClose }) => {
     if (!validate()) return;
     setStep(2);
     try {
-      await axios.post('/api/members', { ...formData, type: 'membership' });
+      await api.post('/api/members', { ...formData, type: 'membership' });
     } catch (_) {}
     setTimeout(() => setStep(3), 2000);
   };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const emptyNews = { title: '', date: '', category: 'New Launch', excerpt: '', image: '' };
 const categories = ['New Launch', 'Expansion', 'Award', 'Technology', 'Partnership', 'General'];
@@ -10,16 +10,16 @@ const News = () => {
   const [form, setForm] = useState(emptyNews);
   const [loading, setLoading] = useState(true);
 
-  const fetch = async () => { try { const r = await axios.get('/api/news'); setNews(r.data.data); } catch (_) {} setLoading(false); };
+  const fetch = async () => { try { const r = await api.get('/api/news'); setNews(r.data.data); } catch (_) {} setLoading(false); };
   useEffect(() => { fetch(); }, []);
 
   const save = async () => {
-    if (modal === 'add') await axios.post('/api/news', form);
-    else await axios.put(`/api/news/${form.id}`, form);
+    if (modal === 'add') await api.post('/api/news', form);
+    else await api.put(`/api/news/${form.id}`, form);
     setModal(null); setForm(emptyNews); fetch();
   };
 
-  const del = async (id) => { if (window.confirm('Delete this news item?')) { await axios.delete(`/api/news/${id}`); fetch(); } };
+  const del = async (id) => { if (window.confirm('Delete this news item?')) { await api.delete(`/api/news/${id}`); fetch(); } };
   const openEdit = (item) => { setForm({ ...item }); setModal('edit'); };
 
   const catColors = { 'New Launch': '#10b981', 'Expansion': '#0077C8', 'Award': '#f0a500', 'Technology': '#8b5cf6', 'Partnership': '#ef4444', 'General': '#6b7280' };
