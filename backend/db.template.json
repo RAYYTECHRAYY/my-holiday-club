@@ -1,0 +1,535 @@
+{
+  "packages": [
+    {
+      "id": "pkg1",
+      "name": "Holiday Starter",
+      "price": 299999,
+      "duration": "3 Nights / 4 Days",
+      "validity": "2 Years",
+      "description": "Perfect for families looking for their first luxury holiday experience.",
+      "images": [
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800",
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800",
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800"
+      ],
+      "features": [
+        "3 Nights Stay",
+        "Breakfast Included",
+        "Airport Transfers",
+        "Welcome Kit",
+        "1 Domestic Destination"
+      ],
+      "color": "#0077C8",
+      "badge": "Starter",
+      "popular": false
+    },
+    {
+      "id": "pkg2",
+      "name": "Holiday Classic",
+      "price": 499999,
+      "duration": "7 Nights / 8 Days",
+      "validity": "3 Years",
+      "description": "Our most popular plan offering the perfect blend of value and luxury.",
+      "images": [
+        "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
+        "https://images.unsplash.com/photo-1614977645540-7abd88ba8e57?w=800",
+        "https://images.unsplash.com/photo-1540541338537-1220059af4a5?w=800"
+      ],
+      "features": [
+        "7 Nights Stay",
+        "All Meals Included",
+        "Airport Transfers",
+        "Spa Access",
+        "2 Destinations",
+        "Priority Booking"
+      ],
+      "color": "#f0a500",
+      "badge": "Most Popular",
+      "popular": true
+    },
+    {
+      "id": "pkg3",
+      "name": "Holiday Premium",
+      "price": 799999,
+      "duration": "14 Nights / 15 Days",
+      "validity": "5 Years",
+      "description": "The ultimate luxury holiday experience with access to international destinations.",
+      "images": [
+        "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800",
+        "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800",
+        "https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=800"
+      ],
+      "features": [
+        "14 Nights Stay",
+        "All Inclusive",
+        "Private Transfers",
+        "Butler Service",
+        "International Destinations",
+        "Concierge 24/7",
+        "Annual Renewal Discount"
+      ],
+      "color": "#00d2aa",
+      "badge": "Premium",
+      "popular": false
+    }
+  ],
+  "destinations": [],
+  "inquiries": [],
+  "contacts": [],
+  "members": [],
+  "news": [],
+  "regions": [
+    {
+      "id": "north-india",
+      "type": "national",
+      "name": "North India",
+      "slug": "north-india",
+      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+      "description": "Majestic Himalayas, royal Rajasthan, spiritual Varanasi and the golden triangle",
+      "order": 1
+    },
+    {
+      "id": "east-india",
+      "type": "national",
+      "name": "East India",
+      "slug": "east-india",
+      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800",
+      "description": "Land of temples, tea gardens, tiger reserves and the Bay of Bengal",
+      "order": 2
+    },
+    {
+      "id": "west-india",
+      "type": "national",
+      "name": "West India",
+      "slug": "west-india",
+      "image": "https://images.unsplash.com/photo-1477587458883-47145ed31c3e?w=800",
+      "description": "Vibrant cities, ancient caves, desert landscapes and pristine beaches of Goa",
+      "order": 3
+    },
+    {
+      "id": "south-india",
+      "type": "national",
+      "name": "South India",
+      "slug": "south-india",
+      "image": "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800",
+      "description": "Backwaters, temples, hill stations and pristine coastlines of the Deccan",
+      "order": 4
+    },
+    {
+      "id": "maldives",
+      "type": "international",
+      "name": "Maldives",
+      "slug": "maldives",
+      "image": "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800",
+      "description": "Crystal lagoons, overwater bungalows and world-class diving",
+      "order": 1
+    },
+    {
+      "id": "thailand",
+      "type": "international",
+      "name": "Thailand",
+      "slug": "thailand",
+      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+      "description": "Golden temples, floating markets, tropical islands and vibrant nightlife",
+      "order": 2
+    },
+    {
+      "id": "dubai",
+      "type": "international",
+      "name": "Dubai",
+      "slug": "dubai",
+      "image": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
+      "description": "Futuristic skyline, desert safaris, luxury shopping and world records",
+      "order": 3
+    }
+  ],
+  "properties": [
+    {
+      "id": "p1",
+      "regionId": "north-india",
+      "name": "The Himalayan Grand Resort",
+      "type": "Resort",
+      "location": "Manali, Himachal Pradesh",
+      "rating": 4.8,
+      "price": 8500,
+      "priceUnit": "per night",
+      "images": [
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800",
+        "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800"
+      ],
+      "description": "Nestled in the heart of the Himalayas, this resort offers breathtaking mountain views, world-class amenities, and an unforgettable alpine experience.",
+      "amenities": [
+        "Mountain View",
+        "Spa & Wellness",
+        "Swimming Pool",
+        "Fine Dining",
+        "Adventure Sports",
+        "Yoga Centre",
+        "Bonfire Area",
+        "Free WiFi"
+      ],
+      "featured": true
+    },
+    {
+      "id": "p2",
+      "regionId": "north-india",
+      "name": "Rajputana Palace Hotel",
+      "type": "Hotel",
+      "location": "Jaipur, Rajasthan",
+      "rating": 4.9,
+      "price": 12000,
+      "priceUnit": "per night",
+      "images": [
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800",
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800"
+      ],
+      "description": "Experience royal Rajasthani heritage in this magnificent palace hotel. Opulent suites, elephant rides, and regal dining await.",
+      "amenities": [
+        "Heritage Architecture",
+        "Royal Spa",
+        "Infinity Pool",
+        "Royal Dining",
+        "Camel Safari",
+        "Cultural Shows",
+        "Concierge",
+        "Free WiFi"
+      ],
+      "featured": true
+    },
+    {
+      "id": "p3",
+      "regionId": "south-india",
+      "name": "Kerala Backwater Resort",
+      "type": "Resort",
+      "location": "Alleppey, Kerala",
+      "rating": 4.7,
+      "price": 7500,
+      "priceUnit": "per night",
+      "images": [
+        "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800",
+        "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800"
+      ],
+      "description": "Float through Kerala's enchanting backwaters in this stunning eco-resort. Houseboat rides, Ayurvedic treatments and fresh seafood.",
+      "amenities": [
+        "Houseboat Experience",
+        "Ayurvedic Spa",
+        "Backwater View",
+        "Organic Food",
+        "Yoga",
+        "Bird Watching",
+        "Kayaking",
+        "Free WiFi"
+      ],
+      "featured": true
+    },
+    {
+      "id": "p4",
+      "regionId": "south-india",
+      "name": "Coorg Coffee Estate Stay",
+      "type": "Resort",
+      "location": "Coorg, Karnataka",
+      "rating": 4.6,
+      "price": 6500,
+      "priceUnit": "per night",
+      "images": [
+        "https://images.unsplash.com/photo-1551882547-ff40c4a49f93?w=800",
+        "https://images.unsplash.com/photo-1587381420270-3e1a5b9e6904?w=800"
+      ],
+      "description": "Wake up to the aroma of fresh coffee in the lush Western Ghats. Plantation walks, waterfall treks and misty mountain mornings.",
+      "amenities": [
+        "Coffee Plantation Tour",
+        "Swimming Pool",
+        "Jungle Trek",
+        "Waterfall Visit",
+        "Bonfire",
+        "Local Cuisine",
+        "Bird Watching",
+        "Free WiFi"
+      ],
+      "featured": false
+    },
+    {
+      "id": "p5",
+      "regionId": "east-india",
+      "name": "Darjeeling Tea Garden Hotel",
+      "type": "Hotel",
+      "location": "Darjeeling, West Bengal",
+      "rating": 4.5,
+      "price": 5500,
+      "priceUnit": "per night",
+      "images": [
+        "https://images.unsplash.com/photo-1596436875877-ee0a6038b7c9?w=800"
+      ],
+      "description": "Perched among tea gardens with panoramic Himalayan views, this boutique hotel is a gateway to Darjeeling's colonial charm.",
+      "amenities": [
+        "Tea Garden Tour",
+        "Mountain View",
+        "Heritage Architecture",
+        "Toy Train Access",
+        "Spa",
+        "Local Cuisine",
+        "Trekking",
+        "Free WiFi"
+      ],
+      "featured": false
+    },
+    {
+      "id": "p6",
+      "regionId": "west-india",
+      "name": "Goa Beachfront Paradise",
+      "type": "Resort",
+      "location": "Calangute, Goa",
+      "rating": 4.7,
+      "price": 9500,
+      "priceUnit": "per night",
+      "images": [
+        "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800"
+      ],
+      "description": "Directly on Goa's most famous beach, this resort combines Portuguese heritage with modern luxury. Sun, sand and soul.",
+      "amenities": [
+        "Beach Access",
+        "Water Sports",
+        "Infinity Pool",
+        "Beach Bar",
+        "Spa",
+        "Watersports",
+        "Live Music",
+        "Free WiFi"
+      ],
+      "featured": true
+    },
+    {
+      "id": "p7",
+      "regionId": "maldives",
+      "name": "Overwater Bliss Maldives",
+      "type": "Resort",
+      "location": "North Male Atoll, Maldives",
+      "rating": 5.0,
+      "price": 45000,
+      "priceUnit": "per night",
+      "images": [
+        "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800"
+      ],
+      "description": "The ultimate luxury escape. Private overwater villas with glass floors, direct ocean access, and world-class marine experiences.",
+      "amenities": [
+        "Overwater Villa",
+        "Glass Floor",
+        "Private Pool",
+        "Diving",
+        "Snorkelling",
+        "Fine Dining",
+        "Spa",
+        "Seaplane Transfer"
+      ],
+      "featured": true
+    },
+    {
+      "id": "p8",
+      "regionId": "dubai",
+      "name": "Burj View Luxury Hotel",
+      "type": "Hotel",
+      "location": "Downtown Dubai, UAE",
+      "rating": 4.9,
+      "price": 28000,
+      "priceUnit": "per night",
+      "images": [
+        "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800"
+      ],
+      "description": "Iconic views of the Burj Khalifa from your suite. World-class dining, desert safari experiences and gold-plated luxury.",
+      "amenities": [
+        "Burj Khalifa View",
+        "Rooftop Pool",
+        "Desert Safari",
+        "Fine Dining",
+        "Spa",
+        "Concierge",
+        "Airport Transfer",
+        "Free WiFi"
+      ],
+      "featured": true
+    }
+  ],
+  "bookings": [],
+  "formSettings": {
+    "bookingForm": {
+      "title": "Book Your Stay",
+      "subtitle": "Fill in your details and our team will confirm your reservation shortly",
+      "fields": [
+        {
+          "id": "bf1",
+          "label": "Full Name",
+          "type": "text",
+          "placeholder": "Enter your full name",
+          "required": true,
+          "enabled": true
+        },
+        {
+          "id": "bf2",
+          "label": "Email Address",
+          "type": "email",
+          "placeholder": "Enter your email",
+          "required": true,
+          "enabled": true
+        },
+        {
+          "id": "bf3",
+          "label": "Phone Number",
+          "type": "tel",
+          "placeholder": "Enter your phone number",
+          "required": true,
+          "enabled": true
+        },
+        {
+          "id": "bf4",
+          "label": "Check-in Date",
+          "type": "date",
+          "placeholder": "",
+          "required": true,
+          "enabled": true
+        },
+        {
+          "id": "bf5",
+          "label": "Check-out Date",
+          "type": "date",
+          "placeholder": "",
+          "required": true,
+          "enabled": true
+        },
+        {
+          "id": "bf6",
+          "label": "Number of Guests",
+          "type": "number",
+          "placeholder": "How many guests?",
+          "required": true,
+          "enabled": true
+        },
+        {
+          "id": "bf7",
+          "label": "Special Requests",
+          "type": "textarea",
+          "placeholder": "Any special requirements or requests?",
+          "required": false,
+          "enabled": true
+        }
+      ]
+    },
+    "memberForm": {
+      "title": "Become a Member",
+      "subtitle": "Join thousands of travellers enjoying exclusive holiday benefits",
+      "fields": [
+        {
+          "id": "mf1",
+          "label": "Full Name",
+          "type": "text",
+          "placeholder": "Enter your full name",
+          "required": true,
+          "enabled": true
+        },
+        {
+          "id": "mf2",
+          "label": "Email Address",
+          "type": "email",
+          "placeholder": "Enter your email",
+          "required": true,
+          "enabled": true
+        },
+        {
+          "id": "mf3",
+          "label": "Phone Number",
+          "type": "tel",
+          "placeholder": "Enter your phone number",
+          "required": true,
+          "enabled": true
+        },
+        {
+          "id": "mf4",
+          "label": "City",
+          "type": "text",
+          "placeholder": "Your city",
+          "required": false,
+          "enabled": true
+        },
+        {
+          "id": "mf5",
+          "label": "Message",
+          "type": "textarea",
+          "placeholder": "Tell us about your travel preferences",
+          "required": false,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  "siteSettings": {
+    "siteName": "My Holiday Club",
+    "contactInfo": {
+      "phone": "+91 98765 43210",
+      "email": "info@myholidayclub.co.in",
+      "address": "123 Travel House, New Delhi",
+      "whatsapp": "+91 98765 43210"
+    },
+    "socialMedia": {
+      "facebook": "#",
+      "instagram": "#",
+      "twitter": "#",
+      "youtube": "#",
+      "linkedin": "#"
+    },
+    "paymentSettings": {
+      "googlePayQR": "",
+      "googlePayUPI": "",
+      "googleReviewsLink": "https://g.page/r/YOUR_REVIEW_LINK",
+      "googleReviewsRating": "4.8",
+      "showPayNow": true
+    },
+    "jwtSecret": "mhc_secret_2026_xK9mPqR",
+    "paymentDetails": {
+      "bankName": "HDFC Bank",
+      "accountName": "My Holiday Club Pvt Ltd",
+      "accountNumber": "50100123456789",
+      "ifsc": "HDFC0001234",
+      "upiId": "myholidayclub@hdfcbank",
+      "instructions": "Please transfer the amount and submit the transaction reference number below."
+    },
+    "membershipBenefits": [
+      {
+        "id": "b1",
+        "icon": "\ud83c\udfe8",
+        "title": "Premium Properties",
+        "desc": "Handpicked luxury resorts with guaranteed quality"
+      },
+      {
+        "id": "b2",
+        "icon": "\ud83d\udcb0",
+        "title": "Members-Only Prices",
+        "desc": "Save up to 50% on room rates versus public pricing"
+      },
+      {
+        "id": "b3",
+        "icon": "\ud83c\udf81",
+        "title": "Annual Bonus Nights",
+        "desc": "Free bonus nights added every membership year"
+      },
+      {
+        "id": "b4",
+        "icon": "\ud83d\udcf1",
+        "title": "Digital Membership Card",
+        "desc": "Access your membership via app or mobile wallet"
+      },
+      {
+        "id": "b5",
+        "icon": "\ud83e\uddf3",
+        "title": "Concierge Services",
+        "desc": "Personal travel assistant for all your needs"
+      },
+      {
+        "id": "b6",
+        "icon": "\ud83d\udd04",
+        "title": "Flexible Booking",
+        "desc": "Easy rescheduling with no extra fees"
+      }
+    ]
+  },
+  "payments": [],
+  "memberAccounts": []
+}

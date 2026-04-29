@@ -1,0 +1,101 @@
+.destinations-page { min-height: 100vh; }
+
+/* Filters bar */
+.dest-filters {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.dest-search-wrap {
+  position: relative; flex: 1; min-width: 220px; max-width: 360px;
+}
+.dest-search-wrap svg {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  color: rgba(255,255,255,0.35); pointer-events: none;
+}
+.dest-search { padding-left: 42px !important; }
+
+.dest-categories { display: flex; gap: 8px; flex-wrap: wrap; }
+.cat-btn {
+  padding: 8px 18px; border-radius: 25px; border: 1px solid var(--border);
+  background: var(--card-bg); color: var(--text);
+  font-size: 12px; font-weight: 600; cursor: pointer; letter-spacing: 0.5px;
+  transition: all 0.2s;
+}
+.cat-btn:hover { border-color: rgba(0,119,200,0.4); color: #fff; }
+.cat-btn.cat-active {
+  background: var(--blue); border-color: var(--blue);
+  color: #fff; box-shadow: 0 4px 14px rgba(0,119,200,0.35);
+}
+.dest-count { font-size: 12px; color: var(--text-dim); white-space: nowrap; margin-left: auto; }
+
+/* Grid */
+.dest-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 28px;
+  padding-top: 0 !important;
+}
+
+.dest-card-full {
+  cursor: pointer; overflow: hidden;
+  animation: cardFadeIn 0.5s ease calc(var(--i) * 0.07s) both;
+}
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dcf-img-wrap { position: relative; height: 220px; overflow: hidden; }
+.dcf-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+.dest-card-full:hover .dcf-img { transform: scale(1.06); }
+.dcf-img-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(10,22,40,0.7) 100%);
+}
+.dcf-category {
+  position: absolute; top: 14px; left: 14px;
+  font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--gold); background: rgba(10,22,40,0.7);
+  padding: 5px 10px; border-radius: 20px;
+  border: 1px solid rgba(240,165,0,0.3); backdrop-filter: blur(6px);
+}
+.dcf-bookmark {
+  position: absolute; top: 14px; right: 14px;
+  width: 32px; height: 32px; border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(10,22,40,0.6); color: rgba(255,255,255,0.6);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s; backdrop-filter: blur(6px);
+}
+.dcf-bookmark:hover { background: rgba(240,165,0,0.2); border-color: var(--gold); color: var(--gold); }
+
+.dcf-body { padding: 22px; display: flex; flex-direction: column; gap: 10px; }
+.dcf-country { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-dim); }
+.dcf-name { font-size: 22px; font-weight: 800; color: #fff; line-height: 1.1; }
+.dcf-tagline { font-size: 12px; font-weight: 600; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase; }
+.dcf-desc { font-size: 13px; color: var(--text); line-height: 1.65; }
+.dcf-highlights { display: flex; flex-wrap: wrap; gap: 6px; }
+.dcf-tag {
+  font-size: 10px; color: rgba(255,255,255,0.55);
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  padding: 4px 10px; border-radius: 15px; letter-spacing: 0.3px;
+}
+.dcf-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 4px; }
+.dcf-price { display: flex; align-items: baseline; gap: 5px; }
+.dcf-from { font-size: 10px; color: var(--text-dim); text-transform: uppercase; }
+.dcf-price-val { font-size: 18px; font-weight: 800; color: var(--gold); }
+.dcf-duration { font-size: 11px; color: var(--text-dim); }
+.dcf-rating { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text); }
+.dcf-rating strong { color: #fff; }
+.dcf-cta { width: 100%; justify-content: center; margin-top: 4px; }
+
+.dest-empty {
+  grid-column: 1/-1; display: flex; flex-direction: column;
+  align-items: center; gap: 16px; padding: 80px 0; color: var(--text-dim);
+}
+.dest-empty span { font-size: 48px; }
+.dest-empty p { font-size: 16px; }
+
+@media (max-width: 600px) {
+  .dest-grid { grid-template-columns: 1fr; }
+}

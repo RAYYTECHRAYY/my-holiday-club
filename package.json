@@ -1,0 +1,16 @@
+{
+  "name": "my-holiday-club",
+  "version": "1.0.0",
+  "description": "My Holiday Club - Full Stack Ecommerce Platform",
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../frontend && npm install && cd ../admin && npm install",
+    "start:backend": "cd backend && node server.js",
+    "start:frontend": "cd frontend && npm start",
+    "start:admin": "cd admin && npm start",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\" \"npm run start:admin\"",
+    "dev": "concurrently --names 'API,WEB,ADMIN' --prefix-colors 'blue,green,yellow' \"npm run start:backend\" \"npm run start:frontend\" \"npm run start:admin\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
