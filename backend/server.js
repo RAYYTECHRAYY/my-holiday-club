@@ -7,6 +7,26 @@ const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+const multer = require('multer');
+
+// In-memory OTP store: { email: { otp, expiresAt, verified } }
+const otpStore = {};
+
+// Create transporter from db settings
+function getTransporter(smtpSettings) {
+  if (!smtpSettings || !smtpSettings.smtpHost || !smtpSettings.smtpUser || !smtpSettings.smtpPass) return null;
+  return nodemailer.createTransport({
+    host: smtpSettings.smtpHost,
+    port: parseInt(smtpSettings.smtpPort) || 587,
+    secure: parseInt(smtpSettings.smtpPort) === 465,
+    auth: { user: smtpSettings.smtpUser, pass: smtpSettings.smtpPass },
+  });
+}
+
+function generateOTP() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
 
 const app = express();
 const server = http.createServer(app);
@@ -20,9 +40,51 @@ const JWT_SECRET = process.env.JWT_SECRET || 'mhc_secret_2026_xK9mPqR';
 
 const allowedOrigins = process.env.FRONTEND_URL
   ? [process.env.FRONTEND_URL, process.env.ADMIN_URL].filter(Boolean)
-  : ['http://localhost:3000','http://localhost:3001'];
+  : [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://77.37.45.215',
+      'http://77.37.45.215:8080',
+      'http://demo.myholidayclub.in',
+      'http://admin-demo.myholidayclub.in',
+    ];
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json({ limit: '20mb' }));
+
+// ── UPLOADS ──
+const UPLOAD_DIR = path.join(__dirname, 'uploads');
+if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+app.use('/uploads', express.static(UPLOAD_DIR));
+
+// ==================== TEMPLATE DOWNLOADS ====================
+const TEMPLATES_DIR = path.join(__dirname, 'templates');
+app.use('/templates', express.static(TEMPLATES_DIR));
+
+app.get('/api/templates/list', (req, res) => {
+  res.json({
+    success: true,
+    templates: {
+      destinations: {
+        excel: '/templates/MHC_Destinations_Template.xlsx',
+        pdf: '/templates/MHC_Destinations_Format_Guide.pdf',
+      },
+      packages: {
+        excel: '/templates/MHC_Packages_Template.xlsx',
+        pdf: '/templates/MHC_Packages_Format_Guide.pdf',
+      },
+    },
+  });
+});
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, UPLOAD_DIR),
+  filename:    (req, file, cb) => cb(null, Date.now() + '-' + file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_')),
+});
+const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
+app.post('/api/upload', upload.single('file'), (req, res) => {
+  if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded' });
+  const host = req.protocol + '://' + req.get('host');
+  res.json({ success: true, url: host + '/uploads/' + req.file.filename });
+});
 
 const readDB = () => JSON.parse(fs.readFileSync(DB_PATH, 'utf8'));
 const writeDB = (data) => fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
@@ -61,26 +123,48 @@ const emitStats = () => {
 app.post('/api/auth/signup', async (req, res) => {
   try {
     const db = readDB();
-    const { email, password, fullName, phone, address, city, state, pincode } = req.body;
+    const { email, password, fullName, phone } = req.body;
     if (!email || !password || !fullName) return res.status(400).json({ success: false, message: 'Name, email and password are required' });
     const exists = (db.memberAccounts || []).find(m => m.email === email);
     if (exists) return res.status(400).json({ success: false, message: 'Email already registered' });
+
+    // Store pending signup data and send OTP - do NOT create account yet
     const hashedPassword = await bcrypt.hash(password, 10);
-    const memberId = 'MHC' + Date.now().toString().slice(-6);
-    const account = {
-      id: uuidv4(), memberId, fullName, email, phone: phone || '',
-      address: address || '', city: city || '', state: state || '', pincode: pincode || '',
-      password: hashedPassword, status: 'pending', packageId: null, packageName: null,
-      joinDate: new Date().toISOString(), createdAt: new Date().toISOString()
+    const otp = generateOTP();
+    otpStore[email] = {
+      otp,
+      expiresAt: Date.now() + 10 * 60 * 1000,
+      pendingSignup: { fullName, email, phone: phone || '', hashedPassword }
     };
-    if (!db.memberAccounts) db.memberAccounts = [];
-    db.memberAccounts.push(account);
-    writeDB(db);
-    const token = jwt.sign({ id: account.id, email: account.email, memberId: account.memberId }, JWT_SECRET, { expiresIn: '7d' });
-    const { password: _, ...safeAccount } = account;
-    io.emit('new_member', safeAccount);
-    emitStats();
-    res.status(201).json({ success: true, token, member: safeAccount });
+    console.log(`[Signup OTP] ${email} → ${otp}`);
+
+    const smtpSettings = db.siteSettings?.smtpSettings || {};
+    const transporter = getTransporter(smtpSettings);
+    if (transporter) {
+      try {
+        await transporter.sendMail({
+          from: `"My Holiday Club" <${smtpSettings.smtpUser}>`,
+          to: email,
+          subject: 'Verify your My Holiday Club account',
+          html: `
+            <div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;padding:32px;background:#f8faff;border-radius:16px;">
+              <div style="text-align:center;margin-bottom:24px;">
+                <h2 style="color:#0077C8;margin:0">My Holiday Club</h2>
+                <p style="color:#6b7280;margin:8px 0 0">Account Verification</p>
+              </div>
+              <div style="background:white;border-radius:12px;padding:28px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+                <p style="color:#374151;margin:0 0 8px">Hi <strong>${fullName}</strong>, welcome!</p>
+                <p style="color:#374151;margin:0 0 16px">Use this code to verify your email and create your account:</p>
+                <div style="font-size:2.5rem;font-weight:900;letter-spacing:12px;color:#0077C8;background:#e8f4ff;padding:16px 24px;border-radius:12px;display:inline-block;margin-bottom:16px">${otp}</div>
+                <p style="color:#9ca3af;font-size:0.85rem;margin:0">This code expires in <strong>10 minutes</strong>. Do not share it with anyone.</p>
+              </div>
+            </div>
+          `
+        });
+      } catch (mailErr) { console.error('[Signup OTP] Email send failed:', mailErr.message); }
+    }
+
+    res.json({ success: true, requiresOtp: true, email, message: 'OTP sent to your email' });
   } catch (err) { console.error(err); res.status(500).json({ success: false, message: 'Server error' }); }
 });
 
@@ -94,9 +178,91 @@ app.post('/api/auth/login', async (req, res) => {
     if (!valid) return res.status(400).json({ success: false, message: 'Invalid email or password' });
     const token = jwt.sign({ id: account.id, email: account.email, memberId: account.memberId }, JWT_SECRET, { expiresIn: '7d' });
     const { password: _, ...safeAccount } = account;
-    // Attach payments
     const payments = (db.payments || []).filter(p => p.memberId === account.id);
     res.json({ success: true, token, member: { ...safeAccount, payments } });
+  } catch (err) { res.status(500).json({ success: false, message: 'Server error' }); }
+});
+
+// Verify OTP — handles both signup (creates account) and any future OTP use
+app.post('/api/auth/verify-otp', async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    const stored = otpStore[email];
+    if (!stored) return res.status(400).json({ success: false, message: 'No OTP found for this email. Please try again.' });
+    if (Date.now() > stored.expiresAt) {
+      delete otpStore[email];
+      return res.status(400).json({ success: false, message: 'OTP has expired. Please try again.' });
+    }
+    if (stored.otp !== otp.trim()) {
+      return res.status(400).json({ success: false, message: 'Invalid OTP. Please try again.' });
+    }
+    delete otpStore[email];
+
+    const db = readDB();
+
+    // If this OTP came from signup, create the account now
+    if (stored.pendingSignup) {
+      const { fullName, phone, hashedPassword } = stored.pendingSignup;
+      const exists = (db.memberAccounts || []).find(m => m.email === email);
+      if (exists) return res.status(400).json({ success: false, message: 'Email already registered.' });
+      const memberId = 'MHC' + Date.now().toString().slice(-6);
+      const account = {
+        id: uuidv4(), memberId, fullName, email, phone,
+        address: '', city: '', state: '', pincode: '',
+        password: hashedPassword, status: 'pending', packageId: null, packageName: null,
+        joinDate: new Date().toISOString(), createdAt: new Date().toISOString()
+      };
+      if (!db.memberAccounts) db.memberAccounts = [];
+      db.memberAccounts.push(account);
+      writeDB(db);
+      const token = jwt.sign({ id: account.id, email: account.email, memberId: account.memberId }, JWT_SECRET, { expiresIn: '7d' });
+      const { password: _, ...safeAccount } = account;
+      io.emit('new_member', safeAccount);
+      emitStats();
+      return res.status(201).json({ success: true, token, member: safeAccount, isNewAccount: true });
+    }
+
+    // Fallback: existing account lookup (not currently used for login)
+    const account = (db.memberAccounts || []).find(m => m.email === email);
+    if (!account) return res.status(400).json({ success: false, message: 'Account not found.' });
+    const token = jwt.sign({ id: account.id, email: account.email, memberId: account.memberId }, JWT_SECRET, { expiresIn: '7d' });
+    const { password: _, ...safeAccount } = account;
+    const payments = (db.payments || []).filter(p => p.memberId === account.id);
+    res.json({ success: true, token, member: { ...safeAccount, payments } });
+  } catch (err) { res.status(500).json({ success: false, message: 'Server error' }); }
+});
+
+// Resend OTP
+app.post('/api/auth/resend-otp', async (req, res) => {
+  try {
+    const { email } = req.body;
+    // Preserve pendingSignup data when regenerating OTP
+    const existing = otpStore[email];
+    const otp = generateOTP();
+    otpStore[email] = { otp, expiresAt: Date.now() + 10 * 60 * 1000, pendingSignup: existing?.pendingSignup || null };
+    console.log(`[OTP resend] ${email} → ${otp}`);
+    const db = readDB();
+
+    const smtpSettings = db.siteSettings?.smtpSettings || {};
+    const transporter = getTransporter(smtpSettings);
+    if (transporter) {
+      try {
+        await transporter.sendMail({
+          from: `"My Holiday Club" <${smtpSettings.smtpUser}>`,
+          to: email,
+          subject: 'Your MHC Login Verification Code (Resent)',
+          html: `
+            <div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;padding:32px;">
+              <h2 style="color:#0077C8">My Holiday Club — OTP Resent</h2>
+              <p>Your new verification code:</p>
+              <div style="font-size:2.5rem;font-weight:900;letter-spacing:12px;color:#0077C8;background:#e8f4ff;padding:16px;border-radius:12px;display:inline-block">${otp}</div>
+              <p style="color:#9ca3af;font-size:0.85rem">Expires in 10 minutes.</p>
+            </div>
+          `
+        });
+      } catch (e) { console.error('[OTP resend] Email failed:', e.message); }
+    }
+    res.json({ success: true, message: 'OTP resent successfully' });
   } catch (err) { res.status(500).json({ success: false, message: 'Server error' }); }
 });
 
@@ -228,15 +394,43 @@ app.put('/api/payments/:id', (req, res) => {
   const idx = (db.payments || []).findIndex(p => p.id === req.params.id);
   if (idx === -1) return res.status(404).json({ success: false, message: 'Not found' });
   db.payments[idx] = { ...db.payments[idx], ...req.body, updatedAt: new Date().toISOString() };
-  // If confirmed, activate the member
+  // If confirmed → activate member + auto-assign invoice number
   if (req.body.status === 'confirmed' && db.payments[idx].memberId) {
     const mIdx = (db.memberAccounts || []).findIndex(m => m.id === db.payments[idx].memberId);
     if (mIdx !== -1) db.memberAccounts[mIdx].status = 'active';
+  }
+  if (req.body.status === 'confirmed' && !db.payments[idx].invoiceNumber) {
+    const year = new Date().getFullYear();
+    const confirmedThisYear = (db.payments || []).filter(p => p.invoiceNumber && p.invoiceNumber.includes(String(year))).length;
+    const seq = String(confirmedThisYear + 1).padStart(4, '0');
+    db.payments[idx].invoiceNumber = `MHC-INV-${year}-${seq}`;
+    db.payments[idx].invoiceDate = new Date().toISOString();
   }
   writeDB(db);
   io.emit('payment_updated', db.payments[idx]);
   emitStats();
   res.json({ success: true, data: db.payments[idx] });
+});
+
+// ==================== INVOICE ====================
+app.get('/api/payments/:id/invoice', (req, res) => {
+  const db = readDB();
+  const payment = (db.payments || []).find(p => p.id === req.params.id);
+  if (!payment) return res.status(404).json({ success: false, message: 'Payment not found' });
+  // Fetch company info from siteSettings
+  const s = db.siteSettings || {};
+  const company = {
+    name:    s.siteName    || 'My Holiday Club',
+    address: s.address     || 'Mumbai, India',
+    phone:   s.phone       || '',
+    email:   s.email       || 'info@myholidayclub.in',
+    website: s.website     || 'www.myholidayclub.in',
+    gst:     s.gstNumber   || '',
+    logo:    s.logoUrl     || '',
+  };
+  // Fetch member details
+  const member = (db.memberAccounts || []).find(m => m.id === payment.memberId) || {};
+  res.json({ success: true, data: { payment, company, member } });
 });
 
 app.delete('/api/payments/:id', (req, res) => {
@@ -326,6 +520,7 @@ app.post('/api/properties', (req, res) => {
   const prop = { id: uuidv4(), ...req.body, createdAt: new Date().toISOString() };
   db.properties = db.properties || [];
   db.properties.push(prop);
+  syncCities(db);
   writeDB(db);
   emitStats();
   res.status(201).json({ success: true, data: prop });
@@ -335,12 +530,14 @@ app.put('/api/properties/:id', (req, res) => {
   const idx = (db.properties || []).findIndex(p => p.id === req.params.id);
   if (idx === -1) return res.status(404).json({ success: false, message: 'Not found' });
   db.properties[idx] = { ...db.properties[idx], ...req.body };
+  syncCities(db);
   writeDB(db);
   res.json({ success: true, data: db.properties[idx] });
 });
 app.delete('/api/properties/:id', (req, res) => {
   const db = readDB();
   db.properties = (db.properties || []).filter(p => p.id !== req.params.id);
+  syncCities(db);
   writeDB(db);
   emitStats();
   res.json({ success: true });
@@ -524,6 +721,37 @@ app.put('/api/settings', (req, res) => {
   res.json({ success: true, data: db.siteSettings });
 });
 
+// ==================== TEST SMTP ====================
+app.post('/api/test-smtp', async (req, res) => {
+  try {
+    const { smtpHost, smtpPort, smtpUser, smtpPass, testTo } = req.body;
+    if (!smtpHost || !smtpUser || !smtpPass) {
+      return res.status(400).json({ success: false, message: 'SMTP host, email and password are required.' });
+    }
+    const transporter = nodemailer.createTransport({
+      host: smtpHost,
+      port: parseInt(smtpPort) || 587,
+      secure: parseInt(smtpPort) === 465,
+      auth: { user: smtpUser, pass: smtpPass }
+    });
+    await transporter.verify();
+    await transporter.sendMail({
+      from: `"My Holiday Club" <${smtpUser}>`,
+      to: testTo || smtpUser,
+      subject: '✅ SMTP Test — My Holiday Club',
+      html: `<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;padding:24px;border:1px solid #e2e8f0;border-radius:8px">
+        <h2 style="color:#1a56db;margin-bottom:8px">✅ SMTP Configuration Working!</h2>
+        <p style="color:#374151">Your email settings are correctly configured. My Holiday Club can now send emails for OTP verification and notifications.</p>
+        <hr style="border:none;border-top:1px solid #e2e8f0;margin:16px 0">
+        <p style="color:#6b7280;font-size:13px">Sent via: ${smtpHost}:${smtpPort || 587}<br>From: ${smtpUser}</p>
+      </div>`
+    });
+    res.json({ success: true, message: `Test email sent successfully to ${testTo || smtpUser}` });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+});
+
 // ==================== PAYMENT SETTINGS ====================
 app.get('/api/payment-settings', (req, res) => {
   const db = readDB();
@@ -571,3 +799,437 @@ app.get('/api/stats', (req, res) => {
 app.get('/api/health', (req, res) => res.json({ status: 'ok', uptime: process.uptime(), env: process.env.NODE_ENV || 'development' }));
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// ==================== CARD & VOUCHER SETTINGS ====================
+app.get('/api/card-voucher-settings', (req, res) => {
+  const db = readDB();
+  res.json({ success: true, data: db.cardVoucherSettings || {} });
+});
+app.put('/api/card-voucher-settings', (req, res) => {
+  const db = readDB();
+  db.cardVoucherSettings = { ...db.cardVoucherSettings, ...req.body };
+  writeDB(db);
+  res.json({ success: true, data: db.cardVoucherSettings });
+});
+
+// ==================== ABOUT US CONTENT ====================
+app.get('/api/about-us', (req, res) => {
+  const db = readDB();
+  res.json({ success: true, data: db.aboutUs || {} });
+});
+app.put('/api/about-us', (req, res) => {
+  const db = readDB();
+  const { section, data } = req.body;
+  if (!section) return res.status(400).json({ success: false, error: 'section required' });
+  db.aboutUs = db.aboutUs || {};
+  db.aboutUs[section] = { ...(db.aboutUs[section] || {}), ...data };
+  writeDB(db);
+  res.json({ success: true, data: db.aboutUs[section] });
+});
+
+// ==================== CHATBOT CONTEXT ====================
+app.get('/api/chatbot-context', (req, res) => {
+  const db = readDB();
+  const s  = db.siteSettings || {};
+
+  // Packages - full list
+  const packages = (db.packages || []).map(p => ({
+    id: p.id, name: p.name, price: p.price, duration: p.duration,
+    description: p.description, features: p.features || [],
+    category: p.category || '', type: p.type || '',
+  }));
+
+  // Destinations - summarised
+  const destinations = (db.properties || []).map(d => ({
+    id: d.id, name: d.name, location: d.location,
+    region: d.region || '', type: d.type || '',
+    description: d.description || '', international: d.international || false,
+  }));
+
+  // Membership benefits
+  const benefits = (db.siteSettings?.membershipBenefits || []).map(b => ({
+    title: b.title, desc: b.desc,
+  }));
+
+  // Membership tiers from packages
+  const tiers = packages.filter(p =>
+    ['starter','classic','premium'].some(t => (p.name || '').toLowerCase().includes(t))
+  );
+
+  // Company info
+  const company = {
+    name:    s.siteName    || 'My Holiday Club',
+    phone:   s.contactInfo?.phone   || s.phone   || '',
+    email:   s.contactInfo?.email   || s.email   || 'info@myholidayclub.in',
+    address: s.contactInfo?.address || s.address || '',
+    website: s.website || 'myholidayclub.in',
+  };
+
+  res.json({
+    success: true,
+    data: { packages, destinations, benefits, tiers, company },
+  });
+});
+
+// ==================== INVOICE SETTINGS ====================
+app.get('/api/invoice-settings', (req, res) => {
+  const db = readDB();
+  res.json({ success: true, data: db.invoiceSettings || {} });
+});
+app.put('/api/invoice-settings', (req, res) => {
+  const db = readDB();
+  db.invoiceSettings = { ...db.invoiceSettings, ...req.body };
+  writeDB(db);
+  res.json({ success: true, data: db.invoiceSettings });
+});
+
+// ==================== TEAM ====================
+app.get('/api/team', (req, res) => {
+  const db = readDB();
+  res.json({ success: true, data: db.team || [] });
+});
+app.put('/api/team', (req, res) => {
+  const db = readDB();
+  db.team = req.body.members || [];
+  writeDB(db);
+  res.json({ success: true, data: db.team });
+});
+
+// ==================== PARSE PDF TEXT ====================
+app.post('/api/parse-pdf', upload.single('file'), async (req, res) => {
+  if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded' });
+  try {
+    const pdfParse = require('pdf-parse');
+    const data = await pdfParse(fs.readFileSync(req.file.path));
+    fs.unlinkSync(req.file.path);
+    res.json({ success: true, text: data.text });
+  } catch (e) {
+    res.status(500).json({ success: false, message: 'PDF parse failed: ' + e.message });
+  }
+});
+
+// ==================== BULK IMPORT ====================
+app.post('/api/bulk-import', (req, res) => {
+  const { entries } = req.body; // [{name, location, city, state, starRating, type, mapsUrl, regionId, description}]
+  if (!Array.isArray(entries) || entries.length === 0)
+    return res.status(400).json({ success: false, message: 'No entries provided' });
+
+  const db = readDB();
+  db.regions = db.regions || [];
+  db.properties = db.properties || [];
+
+  const created = { regions: 0, properties: 0, skipped: 0 };
+
+  entries.forEach(entry => {
+    if (!entry.name || !entry.regionId) { created.skipped++; return; }
+
+    // Only allow existing region IDs — no auto-creation
+    let regionId = entry.regionId;
+    if (regionId.startsWith('__new__')) { created.skipped++; return; }
+    const regionExists = db.regions.find(r => r.id === regionId);
+    if (!regionExists) { created.skipped++; return; }
+
+    // Skip duplicate properties (same name + regionId)
+    const dup = db.properties.find(
+      p => p.regionId === regionId && p.name.toLowerCase() === entry.name.toLowerCase()
+    );
+    if (dup) { created.skipped++; return; }
+
+    const stars = parseInt(entry.starRating) || 0;
+    const typeLabel = entry.type || (stars >= 4 ? 'Hotel' : 'Resort');
+
+    const prop = {
+      id: uuidv4(),
+      regionId,
+      name: entry.name,
+      type: typeLabel,
+      location: entry.location || entry.city || '',
+      starRating: stars,
+      mapsUrl: entry.mapsUrl || '',
+      rating: stars > 0 ? Math.min(5, stars + 0.2 + Math.random() * 0.5) : 4.0,
+      price: entry.price || (stars >= 5 ? 12000 : stars >= 4 ? 8000 : stars >= 3 ? 5000 : 3500),
+      priceUnit: 'per night',
+      images: [
+        'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800',
+        'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800',
+      ],
+      description: entry.description || `${entry.name} — a premium ${stars > 0 ? stars + '-star' : ''} property in ${entry.city || entry.location}.`,
+      amenities: ['Free WiFi', 'Air Conditioning', 'Room Service', 'Parking'],
+      featured: false,
+      createdAt: new Date().toISOString(),
+    };
+    db.properties.push(prop);
+    created.properties++;
+  });
+
+  syncCities(db);
+  writeDB(db);
+  emitStats();
+  res.json({ success: true, created });
+});
+
+// ==================== BULK IMPORT PACKAGES ====================
+app.post('/api/bulk-import-packages', (req, res) => {
+  const { packages } = req.body;
+  if (!Array.isArray(packages) || packages.length === 0)
+    return res.status(400).json({ success: false, message: 'No packages provided' });
+
+  const db = readDB();
+  db.packages = db.packages || [];
+
+  const COLORS = ['#0077C8','#7c3aed','#f59e0b','#10b981','#ef4444','#0ea5e9'];
+  const created = { packages: 0, skipped: 0 };
+
+  packages.forEach((pkg, i) => {
+    if (!pkg.name) { created.skipped++; return; }
+    const dup = db.packages.find(p => p.name.toLowerCase() === pkg.name.toLowerCase());
+    if (dup) { created.skipped++; return; }
+
+    const features = Array.isArray(pkg.features)
+      ? pkg.features
+      : String(pkg.features || '').split(',').map(f => f.trim()).filter(Boolean);
+
+    db.packages.push({
+      id: uuidv4(),
+      name: pkg.name,
+      price: parseInt(pkg.price) || 0,
+      duration: pkg.duration || '3 Nights / 4 Days',
+      validity: pkg.validity || '2 Years',
+      description: pkg.description || `${pkg.name} — a premium holiday membership package.`,
+      images: pkg.images && pkg.images.length
+        ? pkg.images
+        : ['https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800'],
+      features,
+      color: pkg.color || COLORS[i % COLORS.length],
+      badge: pkg.badge || pkg.name.split(' ')[0],
+      popular: pkg.popular === true || String(pkg.popular).toLowerCase() === 'yes',
+      createdAt: new Date().toISOString(),
+    });
+    created.packages++;
+  });
+
+  writeDB(db);
+  res.json({ success: true, created });
+});
+
+// ==================== BULK REMOVE PROPERTIES ====================
+app.post('/api/bulk-remove-properties', (req, res) => {
+  const { propertyIds } = req.body;
+  if (!Array.isArray(propertyIds) || propertyIds.length === 0)
+    return res.status(400).json({ success: false, message: 'No property IDs provided' });
+
+  const db = readDB();
+  const before = (db.properties || []).length;
+  db.properties = (db.properties || []).filter(p => !propertyIds.includes(p.id));
+  const removed = before - db.properties.length;
+
+  syncCities(db);
+  writeDB(db);
+  emitStats();
+  res.json({ success: true, removed, remaining: db.properties.length });
+});
+
+// ==================== BULK REMOVE PACKAGES ====================
+app.post('/api/bulk-remove-packages', (req, res) => {
+  const { packageIds } = req.body;
+  if (!Array.isArray(packageIds) || packageIds.length === 0)
+    return res.status(400).json({ success: false, message: 'No package IDs provided' });
+
+  const db = readDB();
+  const before = (db.packages || []).length;
+  db.packages = (db.packages || []).filter(p => !packageIds.includes(p.id));
+  const removed = before - db.packages.length;
+
+  writeDB(db);
+  res.json({ success: true, removed, remaining: db.packages.length });
+});
+
+// ==================== SEARCH PROPERTIES (for bulk remove) ====================
+app.get('/api/search-properties', (req, res) => {
+  const { q, regionId } = req.query;
+  const db = readDB();
+  let props = db.properties || [];
+
+  if (regionId) {
+    props = props.filter(p => p.regionId === regionId);
+  }
+  if (q) {
+    const query = q.toLowerCase().trim();
+    props = props.filter(p =>
+      (p.name || '').toLowerCase().includes(query) ||
+      (p.city || '').toLowerCase().includes(query) ||
+      (p.location || '').toLowerCase().includes(query) ||
+      (p.type || '').toLowerCase().includes(query)
+    );
+  }
+  res.json({ success: true, data: props });
+});
+
+// ==================== SEARCH PACKAGES (for bulk remove) ====================
+app.get('/api/search-packages', (req, res) => {
+  const { q } = req.query;
+  const db = readDB();
+  let pkgs = db.packages || [];
+
+  if (q) {
+    const query = q.toLowerCase().trim();
+    pkgs = pkgs.filter(p =>
+      (p.name || '').toLowerCase().includes(query) ||
+      (p.badge || '').toLowerCase().includes(query) ||
+      (p.description || '').toLowerCase().includes(query)
+    );
+  }
+  res.json({ success: true, data: pkgs });
+});
+
+// ==================== CITIES ====================
+
+// Helper: derive a slug from a city name
+function citySlug(name) {
+  return (name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+// Sync cities from all current properties (called after any property mutation)
+function syncCities(db) {
+  db.cities = db.cities || [];
+  const seen = {};
+  (db.properties || []).forEach(p => {
+    const raw = (p.city || p.location || '').split(',')[0].trim();
+    if (!raw) return;
+    const slug = citySlug(raw);
+    if (!slug) return;
+    if (!seen[slug]) {
+      seen[slug] = { id: slug, name: raw, slug, regionId: p.regionId || '', propertyCount: 0 };
+    }
+    seen[slug].propertyCount++;
+    // keep regionId from first property that has one
+    if (!seen[slug].regionId && p.regionId) seen[slug].regionId = p.regionId;
+  });
+  db.cities = Object.values(seen).sort((a, b) => a.name.localeCompare(b.name));
+}
+
+// GET /api/cities  — returns all, or filtered by ?regionId=
+app.get('/api/cities', (req, res) => {
+  const db = readDB();
+  syncCities(db);
+  let cities = db.cities;
+  if (req.query.regionId) cities = cities.filter(c => c.regionId === req.query.regionId);
+  res.json(cities);
+});
+
+// GET /api/cities/:slug — single city info + its properties
+app.get('/api/cities/:slug', (req, res) => {
+  const db = readDB();
+  syncCities(db);
+  const slug = req.params.slug;
+  const city = (db.cities || []).find(c => c.slug === slug);
+  if (!city) return res.status(404).json({ success: false, message: 'City not found' });
+  const props = (db.properties || []).filter(p => {
+    const cs = citySlug((p.city || p.location || '').split(',')[0].trim());
+    return cs === slug;
+  });
+  res.json({ success: true, city, properties: props });
+});
+
+// ==================== ANALYTICS ====================
+app.get('/api/analytics', (req, res) => {
+  const db = readDB();
+  const now = new Date();
+
+  const monthKey = d => { const dt = new Date(d); return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`; };
+  const last6 = Array.from({length:6}, (_,i) => {
+    const d = new Date(now.getFullYear(), now.getMonth()-5+i, 1);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+  });
+
+  const bucket = (items, dateField) => {
+    const map = {};
+    (items||[]).forEach(x => { const k = monthKey(x[dateField]||x.createdAt); if(map[k]===undefined) map[k]=0; map[k]++; });
+    return last6.map(m => ({ month: m, count: map[m]||0 }));
+  };
+
+  const propsByRegion = {};
+  (db.properties||[]).forEach(p => { propsByRegion[p.regionId] = (propsByRegion[p.regionId]||0)+1; });
+
+  const propsByType = {};
+  (db.properties||[]).forEach(p => { const t=p.type||'Other'; propsByType[t]=(propsByType[t]||0)+1; });
+
+  res.json({
+    totals: {
+      properties: (db.properties||[]).length,
+      packages:   (db.packages||[]).length,
+      bookings:   (db.bookings||[]).length,
+      enquiries:  (db.enquiries||[]).length,
+      contacts:   (db.contacts||[]).length,
+      members:    (db.members||[]).length,
+      cities:     (db.cities||[]).length,
+    },
+    charts: {
+      bookings:  bucket(db.bookings,  'createdAt'),
+      enquiries: bucket(db.enquiries, 'createdAt'),
+      members:   bucket(db.members,   'createdAt'),
+      contacts:  bucket(db.contacts,  'createdAt'),
+    },
+    propsByRegion,
+    propsByType,
+    recentBookings:  (db.bookings||[]).slice(-5).reverse(),
+    recentEnquiries: (db.enquiries||[]).slice(-5).reverse(),
+    recentMembers:   (db.members||[]).slice(-5).reverse(),
+  });
+});
+
+// ==================== NOTIFICATIONS ====================
+app.get('/api/notifications', (req, res) => {
+  const db = readDB();
+  const limit = parseInt(req.query.limit)||20;
+  const items = [];
+
+  (db.bookings||[]).forEach(b => items.push({
+    id: b.id, type: 'booking', icon: '📅',
+    title: `New Booking — ${b.destination||b.name||'Unknown'}`,
+    subtitle: b.guestName||b.name||'Guest',
+    time: b.createdAt, read: false,
+  }));
+  (db.enquiries||[]).forEach(e => items.push({
+    id: e.id, type: 'enquiry', icon: '📩',
+    title: `Enquiry — ${e.destination||e.subject||'General'}`,
+    subtitle: e.name||e.email||'',
+    time: e.createdAt, read: false,
+  }));
+  (db.contacts||[]).forEach(c => items.push({
+    id: c.id, type: 'contact', icon: '📞',
+    title: `Contact — ${c.subject||c.name||'New Message'}`,
+    subtitle: c.name||c.email||'',
+    time: c.createdAt, read: false,
+  }));
+  (db.members||[]).forEach(m => items.push({
+    id: m.id, type: 'member', icon: '👤',
+    title: `New Member — ${m.fullName||m.email||''}`,
+    subtitle: m.packageId||'Free',
+    time: m.createdAt, read: false,
+  }));
+
+  items.sort((a,b) => new Date(b.time||0) - new Date(a.time||0));
+  res.json(items.slice(0, limit));
+});
+
+// ==================== STAYS (by property type) ====================
+app.get('/api/stays', (req, res) => {
+  const db = readDB();
+  const type = req.query.type; // 'Homestay','Beach Stay','Villa','Cottage'
+  let props = db.properties || [];
+  if (type) {
+    props = props.filter(p => (p.type||'').toLowerCase() === type.toLowerCase());
+  } else {
+    const STAY_TYPES = ['homestay','beach stay','villa','cottage','heritage','farmstay'];
+    props = props.filter(p => STAY_TYPES.includes((p.type||'').toLowerCase()));
+  }
+  // group by type
+  const grouped = {};
+  props.forEach(p => {
+    const t = p.type||'Other';
+    if (!grouped[t]) grouped[t] = [];
+    grouped[t].push(p);
+  });
+  res.json({ success: true, properties: props, grouped, total: props.length });
+});

@@ -11,10 +11,15 @@ const navItems = [
   { id: 'destinationsManager', icon: '🗺️', label: 'Destinations Manager', section: 'content' },
   { id: 'packages', icon: '📦', label: 'Packages', section: 'content' },
   { id: 'membershipBenefits', icon: '🎁', label: 'Membership Benefits', section: 'content' },
+  { id: 'aboutUsManager', icon: '📖', label: 'About Us Pages', section: 'content' },
+  { id: 'teamManager', icon: '👥', label: 'Our Team', section: 'content' },
+  { id: 'bulkUpload', icon: '📦', label: 'Bulk Operations', section: 'content' },
   { id: 'news', icon: '📰', label: 'News & Updates', section: 'content' },
   { id: 'formSettings', icon: '📋', label: 'Form Settings', section: 'settings' },
   { id: 'settings', icon: '⚙️', label: 'Site Settings', section: 'settings' },
   { id: 'payment', icon: '🏦', label: 'Payment & Reviews', section: 'settings' },
+  { id: 'cardVoucherSettings', icon: '🪪', label: 'Card & Voucher', section: 'settings' },
+  { id: 'invoiceSettings', icon: '🧾', label: 'Invoice Settings', section: 'settings' },
 ];
 
 const sections = {

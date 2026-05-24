@@ -16,7 +16,12 @@ import News from './pages/News';
 import PaymentSettings from './pages/PaymentSettings';
 import Login from './pages/Login';
 import MemberAccounts from './pages/MemberAccounts';
+import CardVoucherSettings from './pages/CardVoucherSettings';
+import AboutUsManager from './pages/AboutUsManager';
 import MembershipBenefits from './pages/MembershipBenefits';
+import InvoiceSettings from './pages/InvoiceSettings';
+import TeamManager from './pages/TeamManager';
+import BulkUpload from './pages/BulkUpload';
 import Payments from './pages/Payments';
 
 const TOAST_ICONS = {
@@ -85,8 +90,12 @@ const App = () => {
     contacts: 'Contacts', destinations: 'Destinations', destinationsManager: 'Destinations Manager',
     bookings: 'Bookings', formSettings: 'Form Settings', packages: 'Packages',
     memberAccounts: 'Member Accounts', payments: 'Payments',
-    settings: 'Site Settings', news: 'News', payment: 'Payment & Reviews',
+    settings: 'Site Settings', news: 'News', payment: 'Payment & Reviews', cardVoucherSettings: 'Card & Voucher Settings',
     membershipBenefits: 'Membership Benefits',
+    aboutUsManager: 'About Us Page Editor',
+    invoiceSettings: 'Invoice Settings',
+    teamManager: 'Our Team',
+    bulkUpload: 'Bulk Operations',
   };
 
   const pages = {
@@ -95,8 +104,12 @@ const App = () => {
     destinationsManager: DestinationsManager, bookings: Bookings,
     formSettings: FormSettings, packages: Packages,
     memberAccounts: MemberAccounts, payments: Payments,
-    settings: SiteSettings, news: News, payment: PaymentSettings,
+    settings: SiteSettings, news: News, payment: PaymentSettings, cardVoucherSettings: CardVoucherSettings,
     membershipBenefits: MembershipBenefits,
+    aboutUsManager: AboutUsManager,
+    invoiceSettings: InvoiceSettings,
+    teamManager: TeamManager,
+    bulkUpload: BulkUpload,
   };
   const ActivePage = pages[activePage] || Dashboard;
 
